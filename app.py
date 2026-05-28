@@ -87,5 +87,38 @@ def employees():
 
 
 
+@app.route("/employees/add", methods=["GET", "POST"])
+def add_employee():
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+    if request.method == "POST":
+
+        name = request.form["name"]
+        position = request.form["position"]
+        email = request.form["email"]
+
+        conn = get_db_connection()
+
+        conn.execute(
+            """
+            INSERT INTO employees
+            (user_id, name, position, email)
+
+            VALUES (?, ?, ?, ?)
+            """,
+            (session["user_id"], name, position, email)
+        )
+
+        conn.commit()
+        conn.close()
+
+        return redirect("/employees")
+
+    return render_template("employee_form.html")
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
