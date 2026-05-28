@@ -69,5 +69,23 @@ def logout():
     return redirect("/login")
 
 
+@app.route("/employees")
+def employees():
+    if "user_id" not in session:
+        return redirect("/login")
+
+    conn = get_db_connection()
+
+    employees = conn.execute(
+        "SELECT * FROM employees WHERE user_id = ?",
+        (session["user_id"],)
+    ).fetchall()
+
+    conn.close()
+
+    return render_template("employees.html", employees=employees)
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
