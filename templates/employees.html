@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Employees</h1>
+
+<a href="/employees/add">
+    Add Employee
+</a>
+
+<hr>
+
+{% for employee in employees %}
+
+<div>
+
+    <h3>{{ employee.name }}</h3>
+
+    <p>Position: {{ employee.position }}</p>
+
+    <p>Email: {{ employee.email }}</p>
+
+</div>
+
+<hr>
+
+{% endfor %}
+
+{% endblock %}
