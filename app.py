@@ -119,6 +119,27 @@ def add_employee():
     return render_template("employee_form.html")
 
 
+@app.route("/employees/delete/<int:id>")
+def delete_employee(id):
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+    conn = get_db_connection()
+
+    conn.execute(
+        """
+        DELETE FROM employees
+        WHERE id = ? AND user_id = ?
+        """,
+        (id, session["user_id"])
+    )
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/employees")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
