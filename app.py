@@ -141,5 +141,49 @@ def delete_employee(id):
     return redirect("/employees")
 
 
+@app.route("/employees/edit/<int:id>", methods=["GET", "POST"])
+def edit_employee(id):
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+    conn = get_db_connection()
+
+    employee = conn.execute(
+        """
+        SELECT * FROM employees
+        WHERE id = ? AND user_id = ?
+        """,
+        (id, session["user_id"])
+    ).fetchone()
+
+    if employee is None:
+        conn.close()
+        return redirect("/employees")
+
+    if request.method == "POST":
+        name = request.form["name"]
+        position = request.form["position"]
+        email = request.form["email"]
+
+        conn.execute(
+            """
+            UPDATE employees
+            SET name = ?, position = ?, email = ?
+            WHERE id = ? AND user_id = ?
+            """,
+            (name, position, email, id, session["user_id"])
+        )
+
+        conn.commit()
+        conn.close()
+
+        return redirect("/employees")
+
+    conn.close()
+
+    return render_template("employee_form.html", employee=employee)
+
+
 if __name__ == "__main__":
     app.run(debug=True)

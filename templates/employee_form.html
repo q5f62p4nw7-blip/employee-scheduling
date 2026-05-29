@@ -2,7 +2,13 @@
 
 {% block content %}
 
-<h1>Add Employee</h1>
+<h1>
+    {% if employee %}
+        Edit Employee
+    {% else %}
+        Add Employee
+    {% endif %}
+</h1>
 
 <form method="POST">
 
@@ -10,6 +16,7 @@
         type="text"
         name="name"
         placeholder="Employee Name"
+        value="{{ employee.name if employee else '' }}"
         required
     >
 
@@ -19,6 +26,7 @@
         type="text"
         name="position"
         placeholder="Position"
+        value="{{ employee.position if employee else '' }}"
         required
     >
 
@@ -28,12 +36,13 @@
         type="email"
         name="email"
         placeholder="Email"
+        value="{{ employee.email if employee else '' }}"
     >
 
     <br><br>
 
     <button type="submit">
-        Add Employee
+        Save Employee
     </button>
 
 </form>
