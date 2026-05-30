@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from database import get_db_connection
 
@@ -56,11 +56,103 @@ def login():
         if user and check_password_hash(user["password_hash"], password):
             session["user_id"] = user["id"]
             session["username"] = user["username"]
+
+            flash("Login successful.")
+
             return redirect("/")
+
 
         return "Invalid username or password."
 
     return render_template("login.html")
+
+@app.route("/shifts")
+def shifts():
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+    conn = get_db_connection()
+
+    shifts = conn.execute(
+        """
+        SELECT
+            shifts.*,
+            employees.name as employee_name
+        FROM shifts
+        JOIN employees
+            ON shifts.employee_id = employees.id
+        WHERE shifts.user_id = ?
+        ORDER BY shift_date ASC
+        """,
+        (session["user_id"],)
+    ).fetchall()
+
+    conn.close()
+
+    return render_template(
+        "shifts.html",
+        shifts=shifts
+    )
+
+@app.route("/shifts/add", methods=["GET", "POST"])
+def add_shift():
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+    conn = get_db_connection()
+
+    employees = conn.execute(
+        """
+        SELECT *
+        FROM employees
+        WHERE user_id = ?
+        """,
+        (session["user_id"],)
+    ).fetchall()
+
+    if request.method == "POST":
+
+        employee_id = request.form["employee_id"]
+        shift_date = request.form["shift_date"]
+        start_time = request.form["start_time"]
+        end_time = request.form["end_time"]
+        notes = request.form["notes"]
+
+        conn.execute(
+            """
+            INSERT INTO shifts (
+                employee_id,
+                shift_date,
+                start_time,
+                end_time,
+                notes,
+                user_id
+            )
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (
+                employee_id,
+                shift_date,
+                start_time,
+                end_time,
+                notes,
+                session["user_id"]
+            )
+        )
+
+        conn.commit()
+        conn.close()
+
+        return redirect("/shifts")
+
+    conn.close()
+
+    return render_template(
+        "shift_form.html",
+        employees=employees
+    )
 
 
 @app.route("/logout")
