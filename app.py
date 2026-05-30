@@ -176,6 +176,74 @@ def delete_shift(id):
     return redirect("/shifts")
 
 
+@app.route("/shifts/edit/<int:id>", methods=["GET", "POST"])
+def edit_shift(id):
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+    conn = get_db_connection()
+
+    shift = conn.execute(
+        """
+        SELECT *
+        FROM shifts
+        WHERE id = ? AND user_id = ?
+        """,
+        (id, session["user_id"])
+    ).fetchone()
+
+    employees = conn.execute(
+        """
+        SELECT *
+        FROM employees
+        WHERE user_id = ?
+        """,
+        (session["user_id"],)
+    ).fetchall()
+
+    if shift is None:
+        conn.close()
+        return redirect("/shifts")
+
+    if request.method == "POST":
+        employee_id = request.form["employee_id"]
+        shift_date = request.form["shift_date"]
+        start_time = request.form["start_time"]
+        end_time = request.form["end_time"]
+        notes = request.form["notes"]
+
+        conn.execute(
+            """
+            UPDATE shifts
+            SET employee_id = ?, shift_date = ?, start_time = ?, end_time = ?, notes = ?
+            WHERE id = ? AND user_id = ?
+            """,
+            (
+                employee_id,
+                shift_date,
+                start_time,
+                end_time,
+                notes,
+                id,
+                session["user_id"]
+            )
+        )
+
+        conn.commit()
+        conn.close()
+
+        return redirect("/shifts")
+
+    conn.close()
+
+    return render_template(
+        "shift_form.html",
+        employees=employees,
+        shift=shift
+    )
+
+
 @app.route("/logout")
 def logout():
     session.clear()

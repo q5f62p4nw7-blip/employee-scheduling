@@ -2,7 +2,15 @@
 
 {% block content %}
 
-<h1>Add Shift</h1>
+<h1>
+
+    {% if shift %}
+        Edit Shift
+    {% else %}
+        Add Shift
+    {% endif %}
+
+</h1>
 
 <form method="POST">
 
@@ -14,8 +22,16 @@
 
         {% for employee in employees %}
 
-            <option value="{{ employee.id }}">
+            <option
+                value="{{ employee.id }}"
+
+                {% if shift and shift.employee_id == employee.id %}
+                    selected
+                {% endif %}
+            >
+
                 {{ employee.name }}
+
             </option>
 
         {% endfor %}
@@ -31,6 +47,7 @@
     <input
         type="date"
         name="shift_date"
+        value="{{ shift.shift_date if shift else '' }}"
         required
     >
 
@@ -43,6 +60,7 @@
     <input
         type="time"
         name="start_time"
+        value="{{ shift.start_time if shift else '' }}"
         required
     >
 
@@ -55,6 +73,7 @@
     <input
         type="time"
         name="end_time"
+        value="{{ shift.end_time if shift else '' }}"
         required
     >
 
@@ -68,12 +87,18 @@
         name="notes"
         rows="4"
         cols="40"
-    ></textarea>
+    >{{ shift.notes if shift else '' }}</textarea>
 
     <br><br>
 
     <button type="submit">
-        Add Shift
+
+        {% if shift %}
+            Update Shift
+        {% else %}
+            Add Shift
+        {% endif %}
+
     </button>
 
 </form>
