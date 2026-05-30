@@ -154,6 +154,27 @@ def add_shift():
         employees=employees
     )
 
+@app.route("/shifts/delete/<int:id>")
+def delete_shift(id):
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+    conn = get_db_connection()
+
+    conn.execute(
+        """
+        DELETE FROM shifts
+        WHERE id = ? AND user_id = ?
+        """,
+        (id, session["user_id"])
+    )
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/shifts")
+
 
 @app.route("/logout")
 def logout():
