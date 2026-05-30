@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Add Shift</h1>
+
+<form method="POST">
+
+    <label>Employee</label>
+
+    <br><br>
+
+    <select name="employee_id" required>
+
+        {% for employee in employees %}
+
+            <option value="{{ employee.id }}">
+                {{ employee.name }}
+            </option>
+
+        {% endfor %}
+
+    </select>
+
+    <br><br>
+
+    <label>Date</label>
+
+    <br><br>
+
+    <input
+        type="date"
+        name="shift_date"
+        required
+    >
+
+    <br><br>
+
+    <label>Start Time</label>
+
+    <br><br>
+
+    <input
+        type="time"
+        name="start_time"
+        required
+    >
+
+    <br><br>
+
+    <label>End Time</label>
+
+    <br><br>
+
+    <input
+        type="time"
+        name="end_time"
+        required
+    >
+
+    <br><br>
+
+    <label>Notes</label>
+
+    <br><br>
+
+    <textarea
+        name="notes"
+        rows="4"
+        cols="40"
+    ></textarea>
+
+    <br><br>
+
+    <button type="submit">
+        Add Shift
+    </button>
+
+</form>
+
+{% endblock %}
