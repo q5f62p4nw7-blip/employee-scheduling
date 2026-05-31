@@ -120,6 +120,31 @@ def add_shift():
         end_time = request.form["end_time"]
         notes = request.form["notes"]
 
+        existing_shift = conn.execute(
+            """
+            SELECT *
+            FROM shifts
+            WHERE
+              employee_id = ?
+              AND shift_date = ?
+              AND user_id = ?
+            """,
+            (
+              employee_id,
+              shift_date,
+              session["user_id"]
+            )
+        ).fetchone()
+
+        if existing_shift:
+
+          flash("Employee already has a shift on this date.")
+
+          conn.close()
+
+          return redirect("/shifts/add")
+
+
         conn.execute(
             """
             INSERT INTO shifts (
