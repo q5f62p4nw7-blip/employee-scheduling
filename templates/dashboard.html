@@ -2,8 +2,43 @@
 
 {% block content %}
 
-<h1>Employee Scheduling App</h1>
+<h1>Dashboard</h1>
 
-<p>Welcome to the system.</p>
+<p>
+    Welcome,
+    {{ session.username }}
+</p>
+
+<hr>
+
+<h3>Statistics</h3>
+
+<p>
+    Total Employees:
+    {{ employee_count }}
+</p>
+
+<p>
+    Total Shifts:
+    {{ shift_count }}
+</p>
+
+<hr>
+
+<h3>Quick Actions</h3>
+
+<a href="/employees">View Employees</a>
+
+<br><br>
+
+<a href="/employees/add">Add Employee</a>
+
+<br><br>
+
+<a href="/shifts">View Shifts</a>
+
+<br><br>
+
+<a href="/shifts/add">Add Shift</a>
 
 {% endblock %}

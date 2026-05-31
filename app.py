@@ -9,9 +9,37 @@ app.secret_key = "secret-key"
 
 @app.route("/")
 def home():
+
     if "user_id" not in session:
         return redirect("/login")
-    return render_template("dashboard.html")
+
+    conn = get_db_connection()
+
+    employee_count = conn.execute(
+        """
+        SELECT COUNT(*) as total
+        FROM employees
+        WHERE user_id = ?
+        """,
+        (session["user_id"],)
+    ).fetchone()
+
+    shift_count = conn.execute(
+        """
+        SELECT COUNT(*) as total
+        FROM shifts
+        WHERE user_id = ?
+        """,
+        (session["user_id"],)
+    ).fetchone()
+
+    conn.close()
+
+    return render_template(
+        "dashboard.html",
+        employee_count=employee_count["total"],
+        shift_count=shift_count["total"]
+    )
 
 
 @app.route("/register", methods=["GET", "POST"])
