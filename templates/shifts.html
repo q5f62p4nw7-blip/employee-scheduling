@@ -4,7 +4,9 @@
 
 <h1>Shifts</h1>
 
-<a href="/shifts/add">Add Shift</a>
+<a href="/shifts/add" class="btn btn-primary mb-3">
+    Add Shift
+</a>
 
 <hr>
 
@@ -20,15 +22,13 @@
 
     <p>Notes: {{ shift.notes }}</p>
 
-    <a href="/shifts/edit/{{ shift.id }}">
+    <a href="/shifts/edit/{{ shift.id }}" class="btn btn-warning btn-sm">
     Edit
-</a>
+    </a>
 
-<br><br>
-
-<a href="/shifts/delete/{{ shift.id }}">
+    <a href="/shifts/delete/{{ shift.id }}" class="btn btn-danger btn-sm">
     Delete
-</a>
+    </a>
 
 </div>
 

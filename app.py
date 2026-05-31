@@ -60,8 +60,10 @@ def register():
             conn.commit()
         except:
             conn.close()
-            return "Username already exists."
+            flash("Username already exists.")
+            return redirect("/register")
 
+            
         conn.close()
         return redirect("/login")
 

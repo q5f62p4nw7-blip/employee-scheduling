@@ -2,105 +2,129 @@
 
 {% block content %}
 
-<h1>
+<div class="row justify-content-center">
 
-    {% if shift %}
-        Edit Shift
-    {% else %}
-        Add Shift
-    {% endif %}
+    <div class="col-md-6">
 
-</h1>
+        <h1 class="mb-4 text-center">
 
-<form method="POST">
+            {% if shift %}
+                Edit Shift
+            {% else %}
+                Add Shift
+            {% endif %}
 
-    <label>Employee</label>
+        </h1>
 
-    <br><br>
+        <form method="POST">
 
-    <select name="employee_id" required>
+            <div class="mb-3">
 
-        {% for employee in employees %}
+                <label class="form-label">
+                    Employee
+                </label>
 
-            <option
-                value="{{ employee.id }}"
+                <select name="employee_id" class="form-select" required>
 
-                {% if shift and shift.employee_id == employee.id %}
-                    selected
+                    {% for employee in employees %}
+
+                        <option
+                            value="{{ employee.id }}"
+
+                            {% if shift and shift.employee_id == employee.id %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ employee.name }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Date
+                </label>
+
+                <input
+                    type="date"
+                    name="shift_date"
+                    class="form-control"
+                    value="{{ shift.shift_date if shift else '' }}"
+                    required
+                >
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Start Time
+                    </label>
+
+                    <input
+                        type="time"
+                        name="start_time"
+                        class="form-control"
+                        value="{{ shift.start_time if shift else '' }}"
+                        required
+                    >
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        End Time
+                    </label>
+
+                    <input
+                        type="time"
+                        name="end_time"
+                        class="form-control"
+                        value="{{ shift.end_time if shift else '' }}"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Notes
+                </label>
+
+                <textarea
+                    name="notes"
+                    class="form-control"
+                    rows="4"
+                    placeholder="Enter shift notes..."
+                >{{ shift.notes if shift else '' }}</textarea>
+
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+
+                {% if shift %}
+                    Update Shift
+                {% else %}
+                    Add Shift
                 {% endif %}
-            >
 
-                {{ employee.name }}
+            </button>
 
-            </option>
+        </form>
 
-        {% endfor %}
+    </div>
 
-    </select>
-
-    <br><br>
-
-    <label>Date</label>
-
-    <br><br>
-
-    <input
-        type="date"
-        name="shift_date"
-        value="{{ shift.shift_date if shift else '' }}"
-        required
-    >
-
-    <br><br>
-
-    <label>Start Time</label>
-
-    <br><br>
-
-    <input
-        type="time"
-        name="start_time"
-        value="{{ shift.start_time if shift else '' }}"
-        required
-    >
-
-    <br><br>
-
-    <label>End Time</label>
-
-    <br><br>
-
-    <input
-        type="time"
-        name="end_time"
-        value="{{ shift.end_time if shift else '' }}"
-        required
-    >
-
-    <br><br>
-
-    <label>Notes</label>
-
-    <br><br>
-
-    <textarea
-        name="notes"
-        rows="4"
-        cols="40"
-    >{{ shift.notes if shift else '' }}</textarea>
-
-    <br><br>
-
-    <button type="submit">
-
-        {% if shift %}
-            Update Shift
-        {% else %}
-            Add Shift
-        {% endif %}
-
-    </button>
-
-</form>
+</div>
 
 {% endblock %}

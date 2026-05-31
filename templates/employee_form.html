@@ -2,49 +2,86 @@
 
 {% block content %}
 
-<h1>
-    {% if employee %}
-        Edit Employee
-    {% else %}
-        Add Employee
-    {% endif %}
-</h1>
+<div class="row justify-content-center">
 
-<form method="POST">
+    <div class="col-md-6">
 
-    <input
-        type="text"
-        name="name"
-        placeholder="Employee Name"
-        value="{{ employee.name if employee else '' }}"
-        required
-    >
+        <h1 class="mb-4 text-center">
 
-    <br><br>
+            {% if employee %}
+                Edit Employee
+            {% else %}
+                Add Employee
+            {% endif %}
 
-    <input
-        type="text"
-        name="position"
-        placeholder="Position"
-        value="{{ employee.position if employee else '' }}"
-        required
-    >
+        </h1>
 
-    <br><br>
+        <form method="POST">
 
-    <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        value="{{ employee.email if employee else '' }}"
-    >
+            <div class="mb-3">
 
-    <br><br>
+                <label class="form-label">
+                    Employee Name
+                </label>
 
-    <button type="submit">
-        Save Employee
-    </button>
+                <input
+                    type="text"
+                    name="name"
+                    class="form-control"
+                    placeholder="Enter employee name"
+                    value="{{ employee.name if employee else '' }}"
+                    required
+                >
 
-</form>
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Position
+                </label>
+
+                <input
+                    type="text"
+                    name="position"
+                    class="form-control"
+                    placeholder="Enter position"
+                    value="{{ employee.position if employee else '' }}"
+                    required
+                >
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    name="email"
+                    class="form-control"
+                    placeholder="Enter employee email"
+                    value="{{ employee.email if employee else '' }}"
+                >
+
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+
+                {% if employee %}
+                    Update Employee
+                {% else %}
+                    Save Employee
+                {% endif %}
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
 
 {% endblock %}

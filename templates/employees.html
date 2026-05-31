@@ -4,7 +4,7 @@
 
 <h1>Employees</h1>
 
-<a href="/employees/add">
+<a href="/employees/add" class="btn btn-primary mb-3">
     Add Employee
 </a>
 
@@ -20,11 +20,14 @@
 
     <p>Email: {{ employee.email }}</p>
 
-    <a href="/employees/edit/{{ employee.id }}">Edit</a>
+    <a href="/employees/edit/{{ employee.id }}" class="btn btn-warning btn-sm">
+    Edit
+    </a>
 
-    <a href="/employees/delete/{{ employee.id }}">
+    <a href="/employees/delete/{{ employee.id }}" class="btn btn-danger btn-sm">
     Delete
-</a>
+    </a>
+
 
 </div>
 
