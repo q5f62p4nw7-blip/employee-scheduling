@@ -120,6 +120,11 @@ def add_shift():
         end_time = request.form["end_time"]
         notes = request.form["notes"]
 
+        if start_time >= end_time:
+            flash("End time must be after start time.")
+            conn.close()
+            return redirect("/shifts/add")
+
         existing_shift = conn.execute(
             """
             SELECT *
